@@ -1,0 +1,1163 @@
+<link rel="stylesheet" href="/sites/DEV_LotePiloto/SiteAssets/CSS/bootstrap-custom.css">
+<link rel="stylesheet" href="/sites/DEV_LotePiloto/SiteAssets/CSS/bootstrap-custom-grid.css">
+<link rel="stylesheet" href="/sites/DEV_LotePiloto/SiteAssets/CSS/bootstrap-custom-reboot.css">
+<link rel="stylesheet" href="/sites/DEV_LotePiloto/SiteAssets/CSS/daterangepicker.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="/sites/DEV_LotePiloto/SiteAssets/libs/summernote/summernote-bs4.css">
+<link rel="stylesheet" href="/sites/DEV_LotePiloto/SiteAssets/CSS/lotepiloto.css">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="/sites/DEV_LotePiloto/SiteAssets/JS/popper.min.js"></script>
+<script type="text/javascript" src="/sites/DEV_LotePiloto/SiteAssets/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/sites/DEV_LotePiloto/SiteAssets/JS/moment.min.js"></script>
+<script type="text/javascript" src="/sites/DEV_LotePiloto/SiteAssets/JS/daterangepicker.js"></script>
+<script type="text/javascript" src="/sites/DEV_LotePiloto/SiteAssets/JS/toposort.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript" src="/_layouts/15/MicrosoftAjax.js"></script>
+<script type="text/javascript" src="/_layouts/15/sp.core.js"></script>
+<script type="text/javascript" src="/_layouts/15/sp.runtime.js"></script>
+<script type="text/javascript" src="/_layouts/15/sp.js"></script>
+<script type="text/javascript" src="/_layouts/15/clienttemplates.js"></script>
+<script type="text/javascript" src="/_layouts/15/clientforms.js"></script>
+<script type="text/javascript" src="/_layouts/15/clientpeoplepicker.js"></script>
+<script type="text/javascript" src="/_layouts/15/autofill.js"></script>
+<script type="text/javascript" src="/_layouts/15/1033/sts_strings.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.SPServices/2014.02/jquery.SPServices.js"></script>
+<script type="text/javascript" src="/sites/DEV_LotePiloto/SiteAssets/libs/summernote/summernote-bs4.min.js"></script>
+<script type="text/javascript" src="/sites/DEV_LotePiloto/SiteAssets/deploy/main/JS/lotePiloto.js"></script>
+
+<script type="text/javascript">
+    var $ENV = 'DEVELOPMENT';
+//Fabiano - JS Version
+    /*if ($ENV == 'PRODUCTION') {
+        var script = document.createElement("script");
+        script.src = "/sites/DEV_LotePiloto/SiteAssets/deploy/main/JS/lotePiloto.js";
+        document.getElementsByTagName("head")[0].appendChild(script);
+    } else {
+        $(document).ready(function () {
+            $.getScript("/sites/DEV_LotePiloto/SiteAssets/deploy/main/JS/lotePiloto.js");
+        });
+    }*/    
+</script>
+<style>
+    .note-editor.note-frame.card button {
+        min-width: unset !important;
+    }
+
+    .note-editor.note-frame.card .card-header {
+        padding: unset !important;
+    }
+
+    
+
+</style>
+<div id="main" style="margin-bottom: 40px;">
+    <input type="hidden" name="Title" class="salvar-campo" required />
+    <input type="hidden" class="salvar-campo" id="inputId" name="ID" />
+    <div class="container" style="background-color: rgb(242, 242, 242); padding: 10px; margin-bottom: 10px;">
+        <div class="row">
+            <div class="col-md-6">
+                <label for="inputId">Código Agendamento</label>
+                <input type="text" readonly class="form-control salvar-campo" name="CodigoAgendamento" />
+            </div>
+            <div class="col-md-6">
+                <label for="status">Status</label>
+                <select class="custom-select salvar-campo" id="status" name="Status" disabled>
+                    <option disabled selected value=""></option>
+                </select>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-md-4">
+                <label for="tipoDeLote">Tipo de Lote</label>
+                <select class="custom-select salvar-campo select-enum" id="tipoDeLote" name="TipoLote">
+                    <option disabled selected>Selecione uma opção</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="fabrica">Fábrica</label>
+                <select class="custom-select salvar-campo select-tabela" id="fabrica" name="Fabrica">
+                    <option disabled selected>Selecione uma opção</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="linhaEquipamento">Linha ou Equipamento</label>
+                <select class="custom-select salvar-campo select-tabela" id="linhaEquipamento" name="LinhaEquipamento">
+                    <option disabled selected>Selecione uma opção</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <ul class="nav nav-tabs" id="nav-tab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="pills-produto-tab" data-toggle="pill" href="#pills-produto" role="tab">Produto</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="pills-agendamento-tab" data-toggle="pill" href="#pills-agendamento" role="tab">Agendamento</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="pills-responsaveis-tab" data-toggle="pill" href="#pills-responsaveis" role="tab">Responsáveis</a>
+        </li>
+        <li class="nav-item d-none">
+            <a class="nav-link" id="pills-responsaveis-migrados-tab" data-toggle="pill" href="#pills-responsaveis-migrados" role="tab">Responsáveis - Migrados</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="pills-acompanhamento-tab" data-toggle="pill" href="#pills-acompanhamento" role="tab">Acompanhamento</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="pills-analises-tab" data-toggle="pill" href="#pills-analises" role="tab">Análises</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="pills-historico-tab" data-toggle="pill" href="#pills-historico" role="tab">Histórico</a>
+        </li>
+        <li class="nav-item" title="Esta aba só habilitará para preenchimento nos status &ldquo;Cancelado&rdquo; e &ldquo;Não Executado&rdquo;">
+            <a class="nav-link disabled" id="pills-justificativa-tab" data-toggle="pill" href="#pills-justificativa" role="tab">Justificativa</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-produto" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-6">
+                    <label for="codigoProduto">Código do produto</label>
+                    <input type="text" class="form-control salvar-campo" id="codigoProduto" name="CodigoProduto" maxlength="255">
+                </div>
+                <div class="col-md-6">
+                    <label for="linhaDoProduto">Linha do produto</label>
+                    <select class="custom-select salvar-campo select-enum" id="linhaDoProduto" name="LinhaProduto">
+                        <option disabled selected>Selecione uma opção</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-12">
+                    <label for="produtoDescricao">Descrição do produto</label>
+                    <textarea class="form-control salvar-campo" id="produtoDescricao" name="DescricaoProduto" rows="3" maxlength="255"></textarea>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-6">
+                    <label for="produtoProjeto">Projeto</label>
+                    <input type="text" class="form-control salvar-campo" id="produtoProjeto" name="Projeto" maxlength="255">
+                </div>
+                <div class="col-md-6">
+                    <label for="categoriaDoProjeto">Categoria do projeto</label>
+                    <select class="custom-select salvar-campo select-enum" id="categoriaDoProjeto" name="CategoriaProjeto">
+                        <option disabled selected>Selecione uma opção</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-6">
+                    <label for="produtoFormula">Fórmula</label>
+                    <input type="text" class="form-control salvar-campo" id="produtoFormula" name="Formula" maxlength="255">
+                </div>
+                <div class="col-md-6">
+                    <label for="produtoQuantidade">Quantidade</label>
+                    <input type="number" class="form-control salvar-campo" id="produtoQuantidade" name="QuantidadePecas" onfocusout="ValidarLinhaEquipamento()">
+                </div>
+            </div>
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-6">
+                    <label for="categoriaDoProjeto">Motivo</label>
+                    <select class="custom-select salvar-campo select-enum" id="motivo" name="Motivo">
+                        <option disabled selected>Selecione uma opção</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-auto">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input salvar-campo" id="produtoEnvioAmostras" name="EnvioAmostras">
+                        <label class="custom-control-label" for="produtoEnvioAmostras">Solicitação de envio de amostras</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="formResponsavelAmostra" style="margin-top: 10px;display:none">
+                <div class="col-md-6">
+                    <label for="produtoResponsavelAmostra">Responsável pela amostra</label>
+                    <input type="text" class="form-control salvar-campo" id="produtoResponsavelAmostra" name="ResponsavelAmostra" maxlength="255">
+                </div>
+                <div class="col-md-6">
+                    <label for="produtoQuantidadeAmostra">Quantidade de amostras</label>
+                    <input type="number" class="form-control salvar-campo" id="produtoQuantidadeAmostra" name="QuantidadeAmostra" min="0" max="999999">
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="pills-agendamento" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-4">
+                    <label for="agendamentoCentroCusto">Centro de custo - PEP - NT</label>
+                    <input type="text" class="form-control salvar-campo" id="agendamentoCentroCusto" name="CentroCusto" maxlength="255">
+                </div>
+                <div class="col-md-4">
+                    <label for="grauComplexidade">Grau de complexidade</label>
+                    <select class="custom-select salvar-campo select-enum" id="grauComplexidade" name="GrauComplexidade">
+                        <option disabled selected>Selecione uma opção</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="MaoObra">Mão de Obra</label>
+                    <select class="custom-select salvar-campo select-tabela" id="maoObra" name="MaoObra">
+                        <option value="" selected>Selecione uma opção</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-4">
+                    <label for="agendamentoDataInicioProgramado">Início programado</label>
+                    <input type="text" class="form-control salvar-campo date-time-picker" id="agendamentoDataInicioProgramado" name="InicioProgramado"
+                    />
+                </div>
+                <div class="col-md-2">
+                    <label for="agendamentoDuracaoHoras">Duração (HH)</label>
+                    <input type="number" min="0" max="24" class="form-control salvar-campo" id="agendamentoDuracaoHoras" name="DuracaoEstimadaHoras" />
+                </div>
+                <div class="col-md-2">
+                    <label for="agendamentoDuracaoMinutos">Duração (mm)</label>
+                    <input type="number" min="0" max="59" class="form-control salvar-campo" id="agendamentoDuracaoMinutos" name="DuracaoEstimadaMinutos" />
+                </div>
+                <div class="col-md-4">
+                    <label for="agendamentoFim">Fim programado</label>
+                    <input type="text" class="form-control date-time-picker" id="agendamentoFim" name="FimProgramado" readonly />
+                </div>
+            </div>
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-12">
+                    <label for="agendamentoObservacoes">Observações</label>
+                    <textarea class="form-control salvar-campo rich-text" id="agendamentoObservacoes" name="Observacoes" rows="6"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="pills-responsaveis" style="background-color: rgb(242, 242, 242); padding: 10px; margin-bottom: 10px;">
+            <ul class="nav nav-tabs" id="nav-tab-responsaveis" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="pills-dlpcl-tab" data-toggle="pill" href="#pills-dlpcl" role="tab">DL/PCL</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-eng-envase-tab" data-toggle="pill" href="#pills-eng-envase" role="tab">Eng. Envase</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-eng-fabricacao-tab" data-toggle="pill" href="#pills-eng-fabricacao" role="tab">Eng. Fabricação</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-inov-df-tab" data-toggle="pill" href="#pills-inov-df" role="tab">Inov. DF</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-inov-de-tab" data-toggle="pill" href="#pills-inov-de" role="tab">Inov. DE</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-qualidade-tab" data-toggle="pill" href="#pills-qualidade" role="tab">Qualidade</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-fabrica-tab" data-toggle="pill" href="#pills-fabrica" role="tab">Fábrica</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent-responsaveis">
+                <div class="tab-pane fade show active" id="pills-dlpcl" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaRespRespDLPCL">DL/PCL - Responsável</label>
+                            <div id="peoplePickerAbaRespRespDLPCL"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-eng-envase" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-auto">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input salvar-campo" id="acRespEngEnvase" name="EngenhariaEnvaseAcompanhamento">
+                                <label class="custom-control-label" for="acRespEngEnvase">Haverá acompanhamento durante a execução do lote?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaRespRespEngEnvase">Eng. Envase - Responsável</label>
+                            <div id="peoplePickerAbaRespRespEngEnvase"></div>
+                        </div>
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaRespGerEngEnvase">Eng. Envase - Gerente</label>
+                            <div id="peoplePickerAbaRespGerEngEnvase"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-eng-fabricacao" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-auto">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input salvar-campo" id="acRespEngfabricacao" name="EngenhariaFabricacaoAcompanhamen">
+                                <label class="custom-control-label" for="acRespEngfabricacao">Haverá acompanhamento durante a execução do lote?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaRespRespEngFabricacao">Eng. Fabricação - Responsável</label>
+                            <div id="peoplePickerAbaRespRespEngFabricacao"></div>
+                        </div>
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaRespGerEngFabricacao">Eng. Fabricação - Gerente</label>
+                            <div id="peoplePickerAbaRespGerEngFabricacao"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-inov-df" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-auto">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input salvar-campo" id="acRespInofDF" name="InovacaoDfAcompanhamento">
+                                <label class="custom-control-label" for="acRespInofDF">Haverá acompanhamento durante a execução do lote?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaRespRespInovDF">Inovação DF - Responsável</label>
+                            <div id="peoplePickerAbaRespRespInovDF"></div>
+                        </div>
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaRespGerInovDF">Inovação DF - Gerente</label>
+                            <div id="peoplePickerAbaRespGerInovDF"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-inov-de" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-auto">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input salvar-campo" id="acRespInofDE" name="InovacaoDeAcompanhamento">
+                                <label class="custom-control-label" for="acRespInofDE">Haverá acompanhamento durante a execução do lote?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaRespRespInovDE">Inovação DE - Responsável</label>
+                            <div id="peoplePickerAbaRespRespInovDE"></div>
+                        </div>
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaRespGerInovDE">Inovação DE - Gerente</label>
+                            <div id="peoplePickerAbaRespGerInovDE"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-qualidade" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-auto">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input salvar-campo" id="acRespQualidade" name="QualidadeAcompanhamento">
+                                <label class="custom-control-label" for="acRespQualidade">Haverá acompanhamento durante a execução do lote?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaRespRespQualidade">Qualidade - Responsável</label>
+                            <div id="peoplePickerAbaRespRespQualidade"></div>
+                        </div>
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaRespGerQualidade">Qualidade - Gerente</label>
+                            <div id="peoplePickerAbaRespGerQualidade"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-fabrica" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-auto">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input salvar-campo" id="acRespFabrica" name="FabricaAcompanhamento">
+                                <label class="custom-control-label" for="acRespFabrica">Haverá acompanhamento durante a execução do lote?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaRespCoordProgFabrica">Fábrica - Planejamento de Fábrica</label>
+                            <div id="peoplePickerAbaRespCoordProgFabrica"></div>
+                        </div>
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaRespCoordManFabrica">Fábrica - Coord. de Manufatura</label>
+                            <div id="peoplePickerAbaRespCoordManFabrica"></div>
+                        </div>
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaRespGerFabrica">Fábrica - Gerente</label>
+                            <div id="peoplePickerAbaRespGerFabrica"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="pills-responsaveis-migrados" style="background-color: rgb(242, 242, 242); padding: 10px; margin-bottom: 10px;">
+        </div>
+        <div class="tab-pane fade" id="pills-acompanhamento" style="background-color: rgb(242, 242, 242); padding: 10px; margin-bottom: 10px;" role="tabpanel">
+            <ul class="nav nav-tabs" id="nav-tab-acompanhamento" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="pills-dlpcl-acomp-tab" data-toggle="pill" href="#pills-dlpcl-acomp" role="tab">DL/PCL</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-eng-envase-acomp-tab" data-toggle="pill" href="#pills-eng-envase-acomp" role="tab">Eng. Envase</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-eng-fabricacao-acomp-tab" data-toggle="pill" href="#pills-eng-fabricacao-acomp" role="tab">Eng. Fabricação</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-inov-df-acomp-tab" data-toggle="pill" href="#pills-inov-df-acomp" role="tab">Inov. DF</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-inov-de-acomp-tab" data-toggle="pill" href="#pills-inov-de-acomp" role="tab">Inov. DE</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-qualidade-acomp-tab" data-toggle="pill" href="#pills-qualidade-acomp" role="tab">Qualidade</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-fabrica-acomp-tab" data-toggle="pill" href="#pills-fabrica-acomp" role="tab" >Fábrica</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-meioambiente-acomp-tab" data-toggle="pill" href="#pills-meioambiente-acomp" role="tab">Meio Ambiente</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent-acompanhamento">
+                <div class="tab-pane fade show active" id="pills-dlpcl-acomp" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-auto">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="acRespDLPCLAcomp">
+                                <label class="custom-control-label" for="acRespDLPCLAcomp">Haverá acompanhamento durante a execução do lote?</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-eng-envase-acomp" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-auto">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="acRespEngEnvaseAcomp" name="ExecucaoLoteAcompanhada">
+                                <label class="custom-control-label" for="acRespEngEnvaseAcomp">Haverá acompanhamento durante a execução do lote?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;" id="AbaAcRespsEngEnvase">
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaAcRespEngEnvase">Eng. Envase - Responsável</label>
+                            <div id="peoplePickerAbaAcRespEngEnvase"></div>
+                        </div>
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaAcGerEngEnvase">Eng. Envase - Gerente</label>
+                            <div id="peoplePickerAbaAcGerEngEnvase"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-eng-fabricacao-acomp" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-auto">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="acRespEngFabricacaoAcomp" name="ExecucaoLoteAcompanhada">
+                                <label class="custom-control-label" for="acRespEngFabricacaoAcomp">Haverá acompanhamento durante a execução do lote?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;" id="AbaAcRespsEngFabricacao">
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaAcRespEngFabricacao">Eng. Fabricação - Responsável</label>
+                            <div id="peoplePickerAbaAcRespEngFabricacao"></div>
+                        </div>
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaAcGerEngFabricacao">Eng. Fabricação - Gerente</label>
+                            <div id="peoplePickerAbaAcGerEngFabricacao"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-inov-df-acomp" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-auto">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="acRespInovDFAcomp" name="ExecucaoLoteAcompanhada">
+                                <label class="custom-control-label" for="acRespInovDFAcomp">Haverá acompanhamento durante a execução do lote?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;" id="AbaAcRespsInovDF">
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaAcRespInovDF">Inovação DF - Responsável</label>
+                            <div id="peoplePickerAbaAcRespInovDF"></div>
+                        </div>
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaAcGerInovDF">Inovação DF - Gerente</label>
+                            <div id="peoplePickerAbaAcGerInovDF"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-inov-de-acomp" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-auto">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="acRespInovDEAcomp" name="ExecucaoLoteAcompanhada">
+                                <label class="custom-control-label" for="acRespInovDEAcomp">Haverá acompanhamento durante a execução do lote?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;" id="AbaAcRespsInovDE">
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaAcRespInovDE">Inovação DE - Responsável</label>
+                            <div id="peoplePickerAbaAcRespInovDE"></div>
+                        </div>
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaAcGerInovDE">Inovação DE - Gerente</label>
+                            <div id="peoplePickerAbaAcGerInovDE"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-qualidade-acomp" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-auto">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="acRespQualidadeAcomp" name="ExecucaoLoteAcompanhada">
+                                <label class="custom-control-label" for="acRespQualidadeAcomp">Haverá acompanhamento durante a execução do lote?</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-fabrica-acomp" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-auto">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="acRespFabricaAcomp" name="ExecucaoLoteAcompanhada">
+                                <label class="custom-control-label" for="acRespFabricaAcomp">Haverá acompanhamento durante a execução do lote?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;" id="AbaAcRespsFabrica">
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaAcCoordProgFabrica">Fábrica - Planejamento de Fábrica</label>
+                            <div id="peoplePickerAbaAcCoordProgFabrica"></div>
+                        </div>
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaAcCoordManFabrica">Fábrica - Coordenador de Manufatura</label>
+                            <div id="peoplePickerAbaAcCoordManFabrica"></div>
+                        </div>
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaAcGerFabrica">Fábrica - Gerente</label>
+                            <div id="peoplePickerAbaAcGerFabrica"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-meioambiente-acomp" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-auto">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input salvar-campo" id="acRespMeioAmbienteAcomp" name="MeioAmbienteAcompanhamento">
+                                <label class="custom-control-label" for="acRespMeioAmbienteAcomp">Haverá acompanhamento durante a execução do lote?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;" id="AbaAcRespsMeioAmbiente">
+                        <div class="col-md-auto">
+                            <label for="peoplePickerAbaAcRespMeioAmbiente">Meio Ambiente - Responsável</label>
+                            <div id="peoplePickerAbaAcRespMeioAmbiente"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="pills-analises" style="background-color: rgb(242, 242, 242); padding: 10px; margin-bottom: 10px;" role="tabpanel">
+            <div class="row" style="margin: 10px 0px 10px 0px;">
+                <div class="col-md-6">
+                    <label for="agendamentoFim">Início do registro das análises</label>
+                    <input type="text" class="form-control date-time-picker salvar-campo" id="analiseInicio" name="RegistroAnalisesInicio" readonly />
+                </div>
+            </div>
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a id="pills-tab-qualidade-resp" class="nav-link" data-toggle="pill" href="#tab-qualidade-resp" role="tab">Qualidade</a>
+                </li>
+                <li class="nav-item">
+                    <a id="pills-tab-eng-envase-resp" class="nav-link" data-toggle="pill" href="#tab-eng-envase-resp" role="tab">Eng. Envase</a>
+                </li>
+                <li class="nav-item">
+                    <a id="pills-tab-eng-fabricacao-resp" class="nav-link" data-toggle="pill" href="#tab-eng-fabricacao-resp" role="tab">Eng. Fabricação</a>
+                </li>
+                <li class="nav-item">
+                    <a id="pills-tab-inov-df-resp" class="nav-link" data-toggle="pill" href="#tab-inov-df-resp" role="tab">Inov. DF</a>
+                </li>
+                <li class="nav-item">
+                    <a id="pills-tab-inov-de-resp" class="nav-link" data-toggle="pill" href="#tab-inov-de-resp" role="tab">Inov. DE</a>
+                </li>
+                <li class="nav-item">
+                    <a id="pills-tab-fabrica-resp" class="nav-link" data-toggle="pill" href="#tab-fabrica-resp" role="tab">Fábrica</a>
+                </li>
+                <li class="nav-item">
+                    <a id="pills-tab-meio-ambiente-resp" class="nav-link" data-toggle="pill" href="#tab-meio-ambiente-resp" role="tab">Meio Ambiente</a>
+                </li>
+                <li class="nav-item">
+                    <a id="pills-analise-qualidade-ger" class="nav-link" data-toggle="pill" href="#tab-analise-qualidade-ger" role="tab">Qualidade Gerente</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade" id="tab-qualidade-resp" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-6">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="ExecucaoLoteAcompanhada" class="custom-control-input" id="qualidadeRespAcompanhamento">
+                                <label class="custom-control-label" for="qualidadeRespAcompanhamento">Houve acompanhamento durante a execução do lote?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-4">
+                            <label for="qualidadeRespPessoa">Pessoa</label>
+                            <input id="qualidadeRespPessoa" name="Pessoa" class="form-control" type="text"/>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="qualidadeRespResultado">Resultado</label>
+                            <select class="custom-select select-enum" name="Resultado" id="qualidadeRespResultado">
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="qualidadeRespAvaliado">Avaliado Em</label>
+                            <input id="qualidadeRespAvaliado" name="Avaliado" class="form-control" type="text" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-12">
+                            <label for="qualidadeRespObservacoes">Observações</label>
+                            <textarea class="form-control" name="ObservacoesAnalise" id="qualidadeRespObservacoes" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-6">
+                            <label for="txtAtt-tab-analise-qualidade">Anexos</label>
+                            <input id="txtAtt-tab-analise-qualidade" class="form-control form-control-file" type="file" name="InserirAnexo" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="qualidadeRespMotivo">Motivo Reprovação</label>
+                            <select class="custom-select select-enum" name="ReprovadoMotivo" id="qualidadeRespMotivo">
+                                <option disabled selected>Selecione uma opção</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="row">
+                        <div class="table table-hover">
+                            <table id="data-table-anexo-qualidade" width="100%"></table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-eng-envase-resp" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-6">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="ExecucaoLoteAcompanhada" class="custom-control-input" id="envaseRespAcompanhamento">
+                                <label class="custom-control-label" for="envaseRespAcompanhamento">Houve acompanhamento durante a execução do lote?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-4">
+                            <label for="envaseRespPessoa">Pessoa</label>
+                            <input id="envaseRespPessoa" name="Pessoa" class="form-control" type="text"/>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="envaseRespResultado">Resultado</label>
+                            <select class="custom-select select-enum" name="Resultado" id="envaseRespResultado">
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="envaseRespAvaliado">Avaliado Em</label>
+                            <input id="envaseRespAvaliado" name="Avaliado" class="form-control" type="text" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-12">
+                            <label for="envaseRespObservacoes">Observações</label>
+                            <textarea class="form-control" name="ObservacoesAnalise" id="envaseRespObservacoes" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-6">
+                            <label for="txtAtt-tab-analise-envase">Anexos</label>
+                            <input id="txtAtt-tab-analise-envase" class="form-control form-control-file" type="file" name="InserirAnexo"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="envaseRespMotivo">Motivo Reprovação</label>
+                            <select class="custom-select select-enum" name="ReprovadoMotivo" id="envaseRespMotivo">
+                                <option disabled selected>Selecione uma opção</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <br/>
+                    <br/>
+                    <div class="row">
+                        <div class="table table-hover">
+                            <table  id="data-table-anexo-envase" width="100%"></table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-eng-fabricacao-resp" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-6">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="ExecucaoLoteAcompanhada" class="custom-control-input" id="fabricacaoRespAcompanhamento">
+                                <label class="custom-control-label" for="fabricacaoRespAcompanhamento">Houve acompanhamento durante a execução do lote?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-4">
+                            <label for="fabricacaoRespPessoa">Pessoa</label>
+                            <input id="fabricacaoRespPessoa" name="Pessoa" class="form-control" type="text"/>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="fabricacaoRespResultado">Resultado</label>
+                            <select class="custom-select select-enum" name="Resultado" id="fabricacaoRespResultado">
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="fabricacaoRespAvaliado">Avaliado Em</label>
+                            <input id="fabricacaoRespAvaliado" name="Avaliado" class="form-control" type="text" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-12">
+                            <label for="fabricacaoRespObservacoes">Observações</label>
+                            <textarea class="form-control" name="ObservacoesAnalise" id="fabricacaoRespObservacoes" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-6">
+                            <label for="txtAtt-tab-analise-fabricacao">Anexos</label>
+                            <input id="txtAtt-tab-analise-fabricacao" class="form-control form-control-file" type="file" name="InserirAnexo"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="fabricacaoRespMotivo">Motivo Reprovação</label>
+                            <select class="custom-select select-enum" name="ReprovadoMotivo" id="fabricacaoRespMotivo">
+                                <option disabled selected>Selecione uma opção</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="row">
+                        <div class="table table-hover">
+                            <table  id="data-table-anexo-fabricacao" width="100%"></table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-inov-df-resp" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-6">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="ExecucaoLoteAcompanhada" class="custom-control-input" id="inovDfRespAcompanhamento">
+                                <label class="custom-control-label" for="inovDfRespAcompanhamento">Houve acompanhamento durante a execução do lote?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-4">
+                            <label for="inovDfRespPessoa">Pessoa</label>
+                            <input id="inovDfRespPessoa" name="Pessoa" class="form-control" type="text"/>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inovDfRespResultado">Resultado</label>
+                            <select class="custom-select select-enum" name="Resultado" id="inovDfRespResultado">
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inovDfRespAvaliado">Avaliado Em</label>
+                            <input id="inovDfRespAvaliado" name="Avaliado" class="form-control" type="text" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-12">
+                            <label for="inovDfRespObservacoes">Observações</label>
+                            <textarea class="form-control" name="ObservacoesAnalise" id="inovDfRespObservacoes" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-6">
+                            <label for="txtAtt-tab-analise-inovDf">Anexos</label>
+                            <input id="txtAtt-tab-analise-inovDf" class="form-control form-control-file" type="file" name="InserirAnexo"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inovDfRespMotivo">Motivo Reprovação</label>
+                            <select class="custom-select select-enum" name="ReprovadoMotivo" id="inovDfRespMotivo">
+                                <option disabled selected>Selecione uma opção</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="row">
+                        <div class="table table-hover">
+                            <table id="data-table-anexo-inov-df-resp" width="100%"></table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-inov-de-resp" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-6">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="ExecucaoLoteAcompanhada" class="custom-control-input" id="inovDeRespAcompanhamento">
+                                <label class="custom-control-label" for="inovDeRespAcompanhamento">Houve acompanhamento durante a execução do lote?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-4">
+                            <label for="inovDeRespPessoa">Pessoa</label>
+                            <input id="inovDeRespPessoa" name="Pessoa" class="form-control" type="text"/>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inovDeRespResultado">Resultado</label>
+                            <select class="custom-select select-enum" name="Resultado" id="inovDeRespResultado">
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inovDeRespAvaliado">Avaliado Em</label>
+                            <input id="inovDeRespAvaliado" name="Avaliado" class="form-control" type="text" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-12">
+                            <label for="inovDeRespObservacoes">Observações</label>
+                            <textarea class="form-control" name="ObservacoesAnalise" id="inovDeRespObservacoes" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-6">
+                            <label for="txtAtt-tab-analise-inovDe">Anexos</label>
+                            <input id="txtAtt-tab-analise-inovDe" class="form-control form-control-file" type="file" name="InserirAnexo"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inovDeRespMotivo">Motivo Reprovação</label>
+                            <select class="custom-select select-enum" name="ReprovadoMotivo" id="inovDeRespMotivo">
+                                <option disabled selected>Selecione uma opção</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="row">
+                        <div class="table table-hover">
+                            <table id="data-table-anexo-inovDe" width="100%"></table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-fabrica-resp" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-6">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="ExecucaoLoteAcompanhada" class="custom-control-input" id="fabricaRespAcompanhamento">
+                                <label class="custom-control-label" for="fabricaRespAcompanhamento">Houve acompanhamento durante a execução do lote?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-4">
+                            <label for="fabricaRespPessoa">Pessoa</label>
+                            <input id="fabricaRespPessoa" name="Pessoa" class="form-control" type="text"/>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="fabricaRespResultado">Resultado</label>
+                            <select class="custom-select select-enum" name="Resultado" id="fabricaRespResultado">
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="fabricaRespAvaliado">Avaliado Em</label>
+                            <input id="fabricaRespAvaliado" name="Avaliado" class="form-control" type="text" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-12">
+                            <label for="fabricaRespObservacoes">Observações</label>
+                            <textarea class="form-control" name="ObservacoesAnalise" id="fabricaRespObservacoes" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-6">
+                            <label for="txtAtt-tab-analise-fabrica">Anexos</label>
+                            <input id="txtAtt-tab-analise-fabrica" class="form-control form-control-file" type="file" name="InserirAnexo"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="fabricaRespMotivo">Motivo Reprovação</label>
+                            <select class="custom-select select-enum" name="ReprovadoMotivo" id="fabricaRespMotivo">
+                                <option disabled selected>Selecione uma opção</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="row">
+                        <div class="table table-hover">
+                            <table  id="data-table-anexo-fabrica" width="100%"></table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-meio-ambiente-resp" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div id="brindeMeioAmbiente">
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="col-md-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="ExecucaoLoteAcompanhada" class="custom-control-input" id="meioAmbienteAcompanhamentoBrinde">
+                                    <label class="custom-control-label" for="meioAmbienteAcompanhamentoBrinde">Houve acompanhamento durante a execução do lote?</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="fabricacaoMeioAmbiente">
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="col-md-6">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="ExecucaoLoteAcompanhada" class="custom-control-input" id="meioAmbienteAcompanhamentoFab">
+                                    <label class="custom-control-label" for="meioAmbienteAcompanhamentoFab">Houve acompanhamento durante a execução do lote?</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="MeioAmbienteAumentoConsumoAguaLi" class="custom-control-input" id="aumentoConsumoAguaLimpeza">
+                                    <label class="custom-control-label" for="aumentoConsumoAguaLimpeza">Aumento do consumo de água para limpeza?</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="col-md-6">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="MeioAmbienteAumentoConsumoEnergi" class="custom-control-input" id="aumentoConsumoEnergia">
+                                    <label class="custom-control-label" for="aumentoConsumoEnergia">Aumento de consumo de energia?</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="MeioAmbienteAumentoConsumoAguaFa" class="custom-control-input" id="aumentoConsumoAguaFabricacao">
+                                    <label class="custom-control-label" for="aumentoConsumoAguaFabricacao">Aumento de consumo de água para fabricação?</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 20px;">
+                            <div class="col-md-4">
+                                <label for="abastecimentoGranel">Abastecimento granel</label>
+                                <select name="MeioAmbienteAbastecimentoGranel" class="custom-select select-enum" id="abastecimentoGranel">
+                                    <option disabled selected>Selecione uma opção</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="abastecimentoManual">Abastecimento manual</label>
+                                <select name="MeioAmbienteAbastecimentoManual" class="custom-select select-enum" id="abastecimentoManual">
+                                    <option disabled selected>Selecione uma opção</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="abastecimentoVacuo">Abastecimento vácuo</label>
+                                <select name="MeioAmbienteAbastecimentoVacuo" class="custom-select select-enum" id="abastecimentoVacuo">
+                                    <option disabled selected>Selecione uma opção</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="envaseMeioAmbiente">
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="col-md-6">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="ExecucaoLoteAcompanhada" class="custom-control-input" id="meioAmbienteAcompanhamento">
+                                    <label class="custom-control-label" for="meioAmbienteAcompanhamento">Houve acompanhamento durante a execução do lote?</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="MeioAmbienteAumentoGeracaoResidu" class="custom-control-input" id="aumentoResiduos">
+                                    <label class="custom-control-label" for="aumentoResiduos">Aumento da geração de resíduos?</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="col-md-6">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="MeioAmbienteTipoResiduosGeradosJ" class="custom-control-input" id="tipoResiduosMapeados">
+                                    <label class="custom-control-label" for="tipoResiduosMapeados">Tipo de resíduos gerados já estão mapeados?</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="MeioAmbienteAumentoConsumoAguaLi" class="custom-control-input" id="aumentoConsumoAguaLimpezaEnvase">
+                                    <label class="custom-control-label" for="aumentoConsumoAguaLimpezaEnvase">Aumento do consumo de água para limpeza?</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 20px;">
+                            <div class="col-md-6">
+                                <label for="acondicionamentoRetornavel">Acondicionamento dos materiais em embalagem retornável</label>
+                                <select name="MeioAmbienteAcondicionamentoMate" class="custom-select select-enum" id="acondicionamentoRetornavel">
+                                    <option disabled selected>Selecione uma opção</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="acondicionamentoReciclavel">Acondicionamento dos materiais em embalagem reciclável</label>
+                                <select name="MeioAmbienteAcondicionamentoReci" class="custom-select select-enum" id="acondicionamentoReciclavel">
+                                    <option disabled selected>Selecione uma opção</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-4">
+                            <label for="meioAmbientePessoa">Pessoa</label>
+                            <input id="meioAmbientePessoa" name="Pessoa" class="form-control" type="text"/>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="meioAmbienteResultado">Resultado</label>
+                            <select class="custom-select select-enum" name="Resultado" id="meioAmbienteResultado">
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="meioAmbienteAvaliado">Avaliado Em</label>
+                            <input id="meioAmbienteAvaliado" name="Avaliado" class="form-control" type="text" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-12">
+                            <label for="meioAmbienteObservacoes">Observações</label>
+                            <textarea class="form-control" name="ObservacoesAnalise" id="meioAmbienteObservacoes" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-6">
+                            <label for="txtAtt-tab-analise-meio-ambiente">Anexos</label>
+                            <input id="txtAtt-tab-analise-meio-ambiente" class="form-control form-control-file" type="file" name="InserirAnexo"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="meioAmbienteMotivo">Motivo Reprovação</label>
+                            <select class="custom-select select-enum" name="ReprovadoMotivo" id="meioAmbienteMotivo">
+                                <option disabled selected>Selecione uma opção</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="row">
+                        <div class="table table-hover">
+                            <table id="data-table-anexo-meio-ambiente" width="100%"></table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-analise-qualidade-ger" style="background-color: rgb(242, 242, 242); padding: 10px;" role="tabpanel">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-6">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="ExecucaoLoteAcompanhada" class="custom-control-input" id="qualidadeGerAcompanhamento">
+                                <label class="custom-control-label" for="qualidadeGerAcompanhamento">Houve acompanhamento durante a execução do lote?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-4">
+                            <label for="qualidadeGerPessoa">Pessoa</label>
+                            <input id="qualidadeGerPessoa" name="Pessoa" class="form-control" type="text"/>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="qualidadeGerResultado">Resultado</label>
+                            <select class="custom-select select-enum" name="Resultado" id="qualidadeGerResultado">
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="qualidadeGerAvaliado">Avaliado Em</label>
+                            <input id="qualidadeGerAvaliado" name="Avaliado" class="form-control" type="text" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-12">
+                            <label for="qualidadeGerObservacoes">Observações</label>
+                            <textarea class="form-control" name="ObservacoesAnalise" id="qualidadeGerObservacoes" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-6">
+                            <label for="txtAtt-tab-analise-qualidade-ger">Anexos</label>
+                            <input id="txtAtt-tab-analise-qualidade-ger" class="form-control form-control-file" type="file" name="InserirAnexo"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="qualidadeGerMotivo">Motivo Reprovação</label>
+                            <select class="custom-select select-enum" name="ReprovadoMotivo" id="qualidadeGerMotivo">
+                                <option disabled selected>Selecione uma opção</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <br/>
+                    <br/>
+                    <div class="row">
+                        <div class="table table-hover">
+                            <table id="data-table-anexo-qualid-ger" width="100%"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="pills-historico" style="background-color: rgb(242, 242, 242); padding: 10px; margin-bottom: 10px;" role="tabpanel">
+            <div id="historico" class="table table-hover"></div>
+        </div>
+        <div class="tab-pane fade" id="pills-justificativa" style="background-color: rgb(242, 242, 242); padding: 10px; margin-bottom: 10px;" role="tabpanel">
+                <div class="d-md-none" id="justificativaCancelamento">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-12">
+                            <label for="canceladoMotivo">Motivo</label>
+                            <select class="custom-select salvar-campo select-enum" id="canceladoMotivo" name="CanceladoMotivo">
+                                <option disabled selected>Selecione uma opção</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-12">
+                            <label for="canceladoComentarios">Comentários</label>
+                            <textarea class="form-control salvar-campo" id="canceladoComentarios" name="CanceladoComentarios" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-md-none" id="justificativaNaoExecutado">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-12">
+                            <label for="naoExecutadoMotivo">Motivo</label>
+                            <select class="custom-select salvar-campo select-enum" id="naoExecutadoMotivo" name="NaoExecutadoMotivo">
+                                <option disabled selected>Selecione uma opção</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-12">
+                            <label for="naoExecutadoComentarios">Comentários</label>
+                            <textarea class="form-control salvar-campo" id="naoExecutadoComentarios" name="NaoExecutadoComentarios" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-md-none" id="justificativaInicioProgramado">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-12">
+                            <label for="inicioProgramadoMotivo">Motivo</label>
+                            <select class="custom-select" id="inicioProgramadoMotivo" name="InicioProgramadoMotivo">
+                                <option disabled selected>Selecione uma opção</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-12">
+                            <label for="inicioProgramadoComentarios">Comentários</label>
+                            <textarea class="form-control" id="inicioProgramadoComentarios" name="InicioProgramadoComentarios" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <div class="acoes">
+        <a href="#" class="btn btn-primary btn-salvar" role="button">Salvar</a>
+        <a href="#" class="btn btn-primary btn-salvar-agendar" role="button">Agendar</a>
+        <a href="#" class="btn btn-primary btn-agendar" role="button">Agendar</a>
+        <a href="#" class="btn btn-primary btn-executado" role="button">Executado</a>
+        <a href="#" class="btn btn-primary btn-cancelar-agendamento" role="button">Cancelar Agendamento</a>
+        <a href="#" class="btn btn-primary btn-nao-executado" role="button">Não Executado</a>
+        <a href="#" class="btn btn-primary btn-derivar" role="button">Derivar</a>
+        <a href="#" class="btn btn-primary btn-editar" role="button">Editar</a>
+        <a href="#" class="btn btn-primary btn-editar-resp-acomp" role="button">Editar</a>
+        <a href="#" class="btn btn-primary btn-reagendar" role="button">Reagendar</a>
+        <a href="#" class="btn btn-primary btn-abandonar" role="button">Abandonar</a>
+    </div>
+</div>

@@ -1,0 +1,49 @@
+<script type="text/javascript" src="/sites/DEV_LotePiloto/SiteAssets/JS/fullcalendar/lib/jquery.min.js"></script>
+<script type="text/javascript" src="/sites/DEV_LotePiloto/SiteAssets/JS/fullcalendar/lib/moment.min.js"></script>
+<script type="text/javascript" src="/sites/DEV_LotePiloto/SiteAssets/JS/fullcalendar/fullcalendar.min.js"></script>
+<script type="text/javascript" src="/sites/DEV_LotePiloto/SiteAssets/JS/fullcalendar/locale/es.js"></script>
+<script type="text/javascript" src="/sites/DEV_LotePiloto/SiteAssets/JS/fullcalendar/locale/pt-br.js"></script>
+<script type="text/javascript" src="https://naturabr.sharepoint.com/sites/DEV_LotePiloto/SiteAssets/JS/popper.min.js"></script>
+<script type="text/javascript" src="https://naturabr.sharepoint.com/sites/DEV_LotePiloto/SiteAssets/bootstrap/js/bootstrap.min.js">
+</script>
+<link type="text/css" rel="stylesheet" href="/sites/DEV_LotePiloto/SiteAssets/JS/fullcalendar/fullcalendar.min.css" />
+<link type="text/css" rel="stylesheet" href="/sites/DEV_LotePiloto/SiteAssets/JS/fullcalendar/fullcalendar.min.css" />
+<link type="text/css" rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" />
+<link type="text/css" rel="stylesheet" href="https://naturabr.sharepoint.com/sites/DEV_LotePiloto/SiteAssets/bootstrap/css/bootstrap.min.css"
+/>
+<style>
+    .fc-event {
+        cursor: pointer;
+    }
+    .legenda{
+        display: inline-block;
+        padding-left:5px;
+      
+    }
+    .divLegenda{
+        
+    display: inline-flex;
+    padding-left: 10px;
+
+    }
+
+    
+</style>
+<br/>
+<div  style="display: inline-flex; flex-direction: row;padding-bottom: 15px">
+    <div id="fabricaFiltro" style="width:'50%'"> Filtro por fábrica:
+        <select id="fabrica-selector">
+            <option value="*">Todas as fábricas</option>
+        </select>
+    </div>
+    <div class="divLegenda"> 
+        <span style="padding-right: -8px">Legenda:</span>
+        <div id="legenda" class="divLegenda">
+        </div>
+    </div>
+</div>
+
+<br/>
+<div id="calendar">
+</div>
+<script type="text/javascript" src="/sites/DEV_LotePiloto/SiteAssets/deploy/main/JS/SPfullcalendar.js"></script>

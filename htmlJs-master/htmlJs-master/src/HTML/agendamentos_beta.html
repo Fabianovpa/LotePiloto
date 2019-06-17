@@ -1,0 +1,138 @@
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+
+<iframe width="100%" height="500" id="meuFrame" src="https://naturabr.sharepoint.com/sites/DEV_LotePiloto/Lists/Agendamentos/Acompanhamento.aspx" ></iframe>
+
+<script type="text/javascript">
+
+function removerClique( ) {
+
+    var frame = document.getElementById('meuFrame').contentWindow.document;
+    var b = frame.getElementsByClassName('ms-List-surface')
+
+    var itens;
+    for (i = 0; i < b.length; i++) {
+        var novo = b.item(i).getElementsByClassName('ms-List-page');
+        for (j = 0; j < novo.length; j++) {
+            var spann = novo.item(j).getElementsByClassName('ms-TooltipHost');
+            for (k = 0; k < spann.length; k++) {
+                spann.item(k).remove();
+            }
+        }
+    }
+}
+
+function editarLista(){
+    var $frame = document.getElementById("meuFrame");
+    var $document = $(document.getElementById("meuFrame").contentDocument);
+    
+    $document.ready(function () {            
+        $document.find('button[name=Editar]').click(function () {   
+            var id = $document.find('.ms-DetailsRow.is-selected div[data-automation-key="ID"] span').text();
+            window.location.href = 'https://naturabr.sharepoint.com/sites/DEV_LotePiloto/SiteAssets/main.aspx?action=edit&loteid='+id;
+            return false;   
+        });
+    });
+}
+
+function criarNovo() {
+    var $frame = document.getElementById("meuFrame");
+    var $document = $(document.getElementById("meuFrame").contentDocument);
+    
+    $document.ready(function () {            
+        $document.find('button[name=Novo]').click(function () {                
+            window.location.href = 'https://naturabr.sharepoint.com/sites/DEV_LotePiloto/SiteAssets/main.aspx?action=new';
+            return false;   
+        });
+    });
+}
+
+function threadNovo( maxValue){
+    var me = this;
+    var novoLength = document.getElementById('meuFrame').contentWindow.document.getElementsByName('Novo').length;
+
+    if (novoLength != 0 ){
+        if ( novoLength != 1){
+            novoLength = 0;
+        }
+    }
+
+    if (novoLength == 0){
+        setTimeout(function () { me.threadNovo( maxValue); }, 500);
+    } else {
+        criarNovo();
+        maxValue = addListener(maxValue);
+        setTimeout(function () { me.threadNovo( maxValue); }, 500);
+    }
+}
+
+function threadEditar( maxValue){
+    var me = this;
+    var editarLength = document.getElementById('meuFrame').contentWindow.document.getElementsByName('Editar').length;
+
+    if (editarLength != 0 ){
+        if ( editarLength != 1){
+            editarLength = 0;
+        }
+    }
+
+     if (editarLength == 0){
+        setTimeout(function () { me.threadEditar( maxValue); }, 400);
+    } else {
+        editarLista();
+        maxValue = addListener(maxValue);
+        setTimeout(function () { me.threadEditar( maxValue); }, 400);
+    }
+}
+
+function threadRemoveLink( maxValue){
+    var me = this;
+    var editarLength = document.getElementById('meuFrame').contentWindow.document.getElementsByClassName('ms-List-surface').length;
+
+    if (editarLength != 0 ){
+        if ( editarLength != 1){
+            editarLength = 0;
+        }
+    }
+
+     if (editarLength == 0){
+        setTimeout(function () { me.threadRemoveLink( maxValue); }, 800);
+    } else {
+        removerClique();
+        setTimeout(function () { me.threadRemoveLink( maxValue); }, 800);
+    }
+}
+
+threadNovo(1);
+threadEditar(1);
+threadRemoveLink(1);
+
+function interceptClickEvent(e) {
+
+    var ola = e.target.getAttribute("class");
+    if(ola == null){
+        e.stopPropagation();
+    } else if(ola.indexOf('s-Button') < 0){
+        e.stopPropagation();
+    }
+}
+
+
+function addListener(maxValue) {
+
+    if(maxValue == 1){
+        var $document = $(document.getElementById("meuFrame").contentDocument);
+
+        $document.ready(function () {
+            document.getElementById('meuFrame').contentWindow.document.addEventListener('click', interceptClickEvent, true)
+            document.getElementById('meuFrame').contentWindow.document.addEventListener('dblclick', interceptClickEvent, true)
+        });
+
+        maxValue = 2;
+    }
+    return maxValue;
+}
+
+
+</script>
+
