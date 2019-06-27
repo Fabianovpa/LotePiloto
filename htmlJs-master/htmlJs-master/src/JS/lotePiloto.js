@@ -3866,6 +3866,7 @@ function ModificarBotoesPorFormState(formState) {
                 $btnEditar.show();
                 $btnAgendar.show();
                 $btnDerivar.show();
+                $btnCancelar.show();
             }
             break;
         case RASCUNHO_EM_EDICAO:
@@ -3873,6 +3874,7 @@ function ModificarBotoesPorFormState(formState) {
                 $btnSalvar.show();
                 $btnAgendar.show();
                 $btnAbandonar.show();
+                $btnCancelar.show();
             }
             break;
         case AGENDADO:
@@ -3943,7 +3945,10 @@ function ModificarBotoesPorFormState(formState) {
             }
             break;
         case REGISTRO_DE_ANALISE:
-            $btnEditar.show();
+             $btnEditar.show();
+            if (VerificarGrupoDlPclOuPlantaPiloto()) {
+             $btnCancelar.show();
+            }
             break;
         case EM_NAO_EXECUCAO:
             if (VerificarGrupoRespOuAcomp()) {
@@ -3959,6 +3964,7 @@ function ModificarBotoesPorFormState(formState) {
         case EM_REGISTRO_DE_ANALISE:
             $btnSalvar.show();
             $btnAbandonar.show();
+            
             break;
         case 'Aguardando Reagendamento':
             if (VerificarGrupoDlPclOuPlantaPiloto()) $btnDerivar.show();
@@ -4730,33 +4736,41 @@ function RegistrarBindings() {
     var $acRespMeioAmbienteAcomp = $("input[type=checkbox]#acRespMeioAmbienteAcomp");
 
     R.TipoLote.change(function () {
+
+        clearPeoplePicker("peoplePickerAbaRespRespDLPCL_TopSpan");
+        PreencherResponsavelDlPcl();
+
         ModificarAbasPorTipoDeLote(this.value);
 
         if ([EM_CRIACAO, RASCUNHO_EM_EDICAO, AGENDAMENTO_EM_EDICAO].indexOf(state) > -1) {
 
             
             switch (R.TipoLote.val()){
-                case 'Fabricação':                        
+                case 'Fabricação': 
+                        $("#acRespMeioAmbienteAcomp").prop("checked",false);                       
                         $("#acRespEngEnvase").prop("checked",false);                        
                         $("#acRespEngEnvaseAcomp").prop('checked',false);   
                         $("#acRespInovDEAcomp").prop('checked',false);                        
                         $("#acRespInofDE").prop('checked',false); 
 
                         $("#AbaAcRespsEngEnvase").hide();
-                        $("#AbaAcRespsInovDE").hide();                        
+                        $("#AbaAcRespsInovDE").hide();      
+                        $("#AbaAcRespsMeioAmbiente").hide();                  
                         
                         clearPeoplePicker("peoplePickerAbaAcRespEngEnvase_TopSpan");
                         clearPeoplePicker("peoplePickerAbaAcGerEngEnvase_TopSpan");
                         clearPeoplePicker("peoplePickerAbaAcRespInovDE_TopSpan");
                         clearPeoplePicker("peoplePickerAbaAcGerInovDE_TopSpan");
+                        clearPeoplePicker("peoplePickerAbaAcRespMeioAmbiente_TopSpan");
 
                     break;
                 case 'Envase':
+                        $("#acRespMeioAmbienteAcomp").prop("checked",false);
                         $("#acRespEngfabricacao").prop('checked',false);
                         $("#acRespInofDF").prop('checked',false);  
                         $("#acRespEngFabricacaoAcomp").prop('checked',false);
                         $("#acRespInovDFAcomp").prop('checked',false);
-                        
+                        $("#AbaAcRespsMeioAmbiente").hide();
                         $("#AbaAcRespsEngFabricacao").hide();                        
                         $("#AbaAcRespsInovDF").hide(); 
 
@@ -4764,11 +4778,13 @@ function RegistrarBindings() {
                         clearPeoplePicker("peoplePickerAbaAcGerEngFabricacao_TopSpan");
                         clearPeoplePicker("peoplePickerAbaAcRespInovDF_TopSpan");
                         clearPeoplePicker("peoplePickerAbaAcGerInovDF_TopSpan");
+                        clearPeoplePicker("peoplePickerAbaAcRespMeioAmbiente_TopSpan");
                     break;
                 case 'Brinde':
+                        $("#acRespMeioAmbienteAcomp").prop("checked",false);
                         $("#acRespFabricaAcomp").prop("checked",false); 
                         $("#acRespFabrica").prop("checked",false); 
-
+                        $("#AbaAcRespsMeioAmbiente").hide();
                         $("#acRespEngEnvase").prop("checked",false);                        
                         $("#acRespEngEnvaseAcomp").prop('checked',false);   
                         $("#acRespInovDEAcomp").prop('checked',false);                        
@@ -4796,15 +4812,9 @@ function RegistrarBindings() {
                         clearPeoplePicker("peoplePickerAbaAcCoordProgFabrica_TopSpan");
                         clearPeoplePicker("peoplePickerAbaAcGerFabrica_TopSpan");
                         clearPeoplePicker("peoplePickerAbaAcCoordManFabrica_TopSpan");
+                        clearPeoplePicker("peoplePickerAbaAcRespMeioAmbiente_TopSpan");
 
             }
-
-
-
-
-
-            
-
             //ResetarAbaAcompanhamento();
         }
 
@@ -5129,10 +5139,14 @@ function RegistrarBotoes() {
     var $btnSalvar = $('.btn-salvar');
 
     $btnSalvar.click(function () {
+
+        
+
         if (ValidarStatusECamposObrigatorios()) {
             if (botoesStatus['salvar']) {
                 return false;
             } else {
+                showModalPopUp();
                 botoesStatus['salvar'] = true;
             }
 
@@ -5169,6 +5183,8 @@ function RegistrarBotoes() {
             botoesStatus['salvar'] = false;
             
         }
+
+      
 
         return false;
     });
@@ -6071,16 +6087,67 @@ function ExibirAnexosNaLista(responsavelId, $tabelaAnexos, editavel) {
     });
 }
 
+// Numeric only control handler
+jQuery.fn.ForceNumericOnly =
+function()
+{
+    return this.each(function()
+    {
+        $(this).keydown(function(e)
+        {
+            var key = e.charCode || e.keyCode || 0;
+            // allow backspace, tab, delete, enter, arrows, numbers and keypad numbers ONLY
+            // home, end, period, and numpad decimal
+            return (
+                key == 8 || 
+                key == 9 ||
+                key == 13 ||
+                key == 46 ||
+                key == 110 ||
+                key == 190 ||
+                (key >= 35 && key <= 40) ||
+                (key >= 48 && key <= 57) ||
+                (key >= 96 && key <= 105));
+        });
+    });
+};
+
+
+
+function showModalPopUp() {
+    $('body').loadingModal({text: 'Aguarde...'});    
+
+    var delay = function(ms){ return new Promise(function(r) { setTimeout(r, ms) }) };
+    var time = 5000;
+
+   delay(time)
+           .then(function() { $('body').loadingModal('animation', 'rotatingPlane').loadingModal('backgroundColor', 'gray'); return delay(time);})
+           .then(function() { $('body').loadingModal('hide'); return delay(time); } )
+           .then(function() { $('body').loadingModal('destroy') ;} );
+}
+
+
 $(document).ready(function () {
+
+    
+
     // Recarregando refeferências
     Object.keys(R).forEach(function (key) {
         R[key] = $(R[key].selector);
     });
 
-    $('#agendamentoObservacoes').summernote({
-        minHeight: 288,
-        toolbar: false
+    $('#agendamentoObservacoes').summernote({        
+        height: '300px',
+        toolbar: false,
+        disableResize: true,            // Does not work
+        disableResizeEditor: true,      // Does not work either
+        resize: false                   // Does not work either
     });
+
+    $('#produtoQuantidade').ForceNumericOnly();
+
+
+
 
     $('#onetIDListForm').css('width', '100%');
     UsuarioLogado = CarregarUsuarioAtual();
